@@ -1,7 +1,7 @@
 const express = require('express');
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
 // Middleware
 app.use(express.json());
@@ -34,74 +34,73 @@ let books = [
 
 // GET all books
 app.get('/api/books', (req, res) => {
-    res.json(books);
+  res.json(books);
 });
 
 // GET a specific book by ID
 app.get('/api/books/:id', (req, res) => {
-    const bookId = parseInt(req.params.id);
-    const book = books.find(b => b.id === bookId);
+  const bookId = parseInt(req.params.id);
+  const book = books.find(b => b.id === bookId);
 
-    if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
-    }
+  if (!book) {
+    return res.status(404).json({ error: 'Book not found' });
+  }
 
-    res.json(book);
+  res.json(book);
 });
 
 // POST new book
 app.post('/api/books', (req, res) => {
-    const { title, author, genre, copiesAvailable } = req.body;
+  const { title, author, genre, copiesAvailable } = req.body;
 
-    const newBook = {
-        id: books.length + 1,
-        title,
-        author,
-        genre,
-        copiesAvailable
-    };
+  const newBook = {
+    id: books.length + 1,
+    title,
+    author,
+    genre,
+    copiesAvailable
+  };
 
-    books.push(newBook);
-    res.status(201).json(newBook);
+  books.push(newBook);
+  res.status(201).json(newBook);
 });
 
 // PUT update an existing book
 app.put('/api/books/:id', (req, res) => {
-    const bookId = parseInt(req.params.id);
-    const book = books.find(b => b.id === bookId);
+  const bookId = parseInt(req.params.id);
+  const book = books.find(b => b.id === bookId);
 
-    if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
-    }
+  if (!book) {
+    return res.status(404).json({ error: 'Book not found' });
+  }
 
-    const { title, author, genre, copiesAvailable } = req.body;
+  const { title, author, genre, copiesAvailable } = req.body;
 
-    if (title !== undefined) book.title = title;
-    if (author !== undefined) book.author = author;
-    if (genre !== undefined) book.genre = genre;
-    if (copiesAvailable !== undefined) book.copiesAvailable = copiesAvailable;
+  if (title !== undefined) book.title = title;
+  if (author !== undefined) book.author = author;
+  if (genre !== undefined) book.genre = genre;
+  if (copiesAvailable !== undefined) book.copiesAvailable = copiesAvailable;
 
-    res.json(book);
+  res.json(book);
 });
 
 // DELETE a book
 app.delete('/api/books/:id', (req, res) => {
-    const bookId = parseInt(req.params.id);
-    const bookIndex = books.findIndex(b => b.id === bookId);
+  const bookId = parseInt(req.params.id);
+  const bookIndex = books.findIndex(b => b.id === bookId);
 
-    if (bookIndex === -1) {
-        return res.status(404).json({ error: 'Book not found' });
-    }
+  if (bookIndex === -1) {
+    return res.status(404).json({ error: 'Book not found' });
+  }
 
-    const deletedBook = books.splice(bookIndex, 1)[0];
-    res.json({ message: 'Book deleted successfully', book: deletedBook });
+  const deletedBook = books.splice(bookIndex, 1)[0];
+  res.json({ message: 'Book deleted successfully', book: deletedBook });
 });
 
-// Start server (only when run directly, so tests can import the app)
 if (require.main === module) {
-    app.listen(port, () => {
-        console.log(`Server running on http://localhost:${port}/api/books`);
-    });
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}/api/books`);
+  });
 }
 
 module.exports = app;
